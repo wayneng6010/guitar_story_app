@@ -49,7 +49,7 @@ public class ItemLab {
         return mItems;
     }
 
-    public Item getCrime(UUID id) {
+    public Item getItem(UUID id) {
         for (Item item : mItems) {
             if (item.getId().equals(id)) {
                 return item;

@@ -1,5 +1,7 @@
 package com.inti.student.criminalintent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 public class TaskListFragment extends Fragment {
     private RecyclerView mItemRecyclerView;
@@ -37,7 +40,7 @@ public class TaskListFragment extends Fragment {
         mItemRecyclerView.setAdapter(mAdapter);
     }
 
-    private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView mNameTextView;
         private TextView mCatTextView;
         private TextView mPriceTextView;
@@ -45,19 +48,29 @@ public class TaskListFragment extends Fragment {
         private String mImageName;
         private int mImageID;
         private Item mItem;
+        private UUID mItemUUID;
+        private String mItemName;
+        private String mItemCategory;
+        private String mItemPrice;
+        private String mItemDescription;
 
-        public CrimeHolder(View itemView) {
+        public ItemHolder(View itemView) {
             super(itemView);
             mNameTextView = (TextView) itemView.findViewById(R.id.list_item_name);
             mCatTextView = (TextView) itemView.findViewById(R.id.list_item_cat);
             mPriceTextView = (TextView) itemView.findViewById(R.id.list_item_price);
             mItemImageView = (ImageView) itemView.findViewById(R.id.list_item_image);
             itemView.setOnClickListener(this);
-
         }
 
-        public void bindCrime(Item item) {
+        public void bindItem(Item item) {
             mItem = item;
+            mItemUUID = mItem.getId();
+            mItemName = mItem.getName();
+            mItemCategory = mItem.getCategory();
+            mItemPrice = Integer.toString(mItem.getPrice());
+            mItemDescription = mItem.getDescription();
+
             mNameTextView.setText(mItem.getName());
             mCatTextView.setText(mItem.getCategory());
             mPriceTextView.setText("RM" + String.valueOf(mItem.getPrice()));
@@ -69,27 +82,40 @@ public class TaskListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(), mItem.getId() + " clicked!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), mItem.getId() + " clicked!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(view.getContext(),ItemDetailsActivity.class);
+            intent.putExtra("itemImage", mImageName);
+            intent.putExtra("itemPrice", mItemPrice);
+            intent.putExtra("itemName", mItemName);
+            intent.putExtra("itemCategory", mItemCategory);
+            intent.putExtra("itemDescription", mItemDescription);
+            startActivity(intent);
+
+//            Bundle bundle = new Bundle();
+//            bundle.putString("itemUUID", "mItemUUID");
+//            ItemDetailsFragment fragobj = new ItemDetailsFragment();
+//            fragobj.setArguments(bundle);
+
         }
     }
 
-    private class ItemAdapter extends RecyclerView.Adapter<CrimeHolder> {
+    private class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
         private List<Item> mItems;
         public ItemAdapter(List<Item> items) {
             mItems = items;
         }
 
         @Override
-        public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater.inflate(R.layout.list_item, parent, false);
-            return new CrimeHolder(view);
+            return new ItemHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(CrimeHolder holder, int position) {
+        public void onBindViewHolder(ItemHolder holder, int position) {
             Item item = mItems.get(position);
-            holder.bindCrime(item);
+            holder.bindItem(item);
         }
 
         @Override
