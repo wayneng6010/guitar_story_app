@@ -1,22 +1,17 @@
 package com.inti.student.criminalintent;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Comment;
 
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +37,7 @@ public class CartFragment extends AppCompatActivity {
         datasource.open();
 
         List<ItemPurchase> values = datasource.getAllItemPurchase();
-        UUID itemUUID = UUID.fromString(values.get(1).toString());
+        String itemUUID = values.get(1).toString();
         Toast.makeText(getApplicationContext(),itemUUID.toString(),Toast.LENGTH_SHORT).show();
         ItemLab itemLab = ItemLab.get(this);
         Item item = itemLab.getItem(itemUUID);
@@ -88,7 +83,7 @@ public class CartFragment extends AppCompatActivity {
             mCatTextView = (TextView) itemView.findViewById(R.id.cart_item_category);
             mPriceTextView = (TextView) itemView.findViewById(R.id.cart_item_price);
             mItemImageView = (ImageView) itemView.findViewById(R.id.cart_item_image);
-            mQtyNumberPicker = (NumberPicker) itemView.findViewById(R.id.cart_item_quantity);
+            mQtyNumberPicker = (NumberPicker) itemView.findViewById(R.id.cart_quantity_np);
             itemView.setOnClickListener(this);
         }
 

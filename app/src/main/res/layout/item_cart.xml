@@ -22,7 +22,7 @@
 
         <RelativeLayout
             android:id="@+id/cart_upper_layout"
-            android:layout_width="match_parent"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="130dp"
@@ -32,44 +32,39 @@
                 android:id="@+id/cart_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Item Name" />
+                android:paddingVertical="5dp"
+                android:text="Item Name"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/cart_item_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingVertical="5dp"
                 android:layout_below="@+id/cart_item_name"
-                android:textSize="12sp"
-                android:text="Category | Acoustic Guitar" />
+                android:text="Category | Acoustic Guitar"
+                android:textSize="12sp" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/cart_item_price"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingVertical="5dp"
                 android:layout_below="@+id/cart_item_category"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="5dp">
+                android:text="RM291"
+                android:textColor="#ff6b21"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/cart_item_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textColor="#ff6b21"
-                    android:textStyle="bold"
-                    android:text="RM291" />
-
-                <NumberPicker
-                    android:id="@+id/cart_item_quantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"></NumberPicker>
-
-            </RelativeLayout>
 
         </RelativeLayout>
+
+        <NumberPicker
+            android:id="@+id/cart_quantity_np"
+            android:layout_margin="15dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
 
     </RelativeLayout>
 

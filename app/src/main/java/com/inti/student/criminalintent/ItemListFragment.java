@@ -46,7 +46,7 @@ public class ItemListFragment extends Fragment {
         private String mImageName;
         private int mImageID;
         private Item mItem;
-        private UUID mItemUUID;
+        private String mItemUUID;
 
         public ItemHolder(View itemView) {
             super(itemView);

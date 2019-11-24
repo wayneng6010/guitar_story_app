@@ -36,7 +36,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         TextView mCategoryView = (TextView) findViewById(R.id.details_item_cat);
         TextView mDescriptionView = (TextView) findViewById(R.id.details_item_description);
 
-        final UUID itemUUID = UUID.fromString(getIntent().getStringExtra("itemUUID"));
+        final String itemUUID = getIntent().getStringExtra("itemUUID");
 
         ItemLab itemLab = ItemLab.get(this);
         Item item = itemLab.getItem(itemUUID);

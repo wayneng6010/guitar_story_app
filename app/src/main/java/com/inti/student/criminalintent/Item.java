@@ -4,15 +4,15 @@ import java.util.UUID;
 
 public class Item {
 
-    private UUID mId;
+    private String mId;
     private String mName;
     private String mCategory;
     private int mPrice;
     private String mDescription;
     private String mImageName;
 
-    public Item(String name, String category, int price, String description, String imageName) {
-        mId = UUID.randomUUID(); // generate unique identifier
+    public Item(String id, String name, String category, int price, String description, String imageName) {
+        mId = id;
         mName = name;
         mCategory = category;
         mPrice = price;
@@ -20,7 +20,7 @@ public class Item {
         mImageName = imageName;
     }
 
-    public UUID getId() {
+    public String getId() {
         return mId;
     }
 
