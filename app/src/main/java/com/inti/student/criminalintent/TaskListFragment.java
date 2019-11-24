@@ -82,20 +82,9 @@ public class TaskListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-//            Toast.makeText(getActivity(), mItem.getId() + " clicked!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(view.getContext(),ItemDetailsActivity.class);
-            intent.putExtra("itemImage", mImageName);
-            intent.putExtra("itemPrice", mItemPrice);
-            intent.putExtra("itemName", mItemName);
-            intent.putExtra("itemCategory", mItemCategory);
-            intent.putExtra("itemDescription", mItemDescription);
+            intent.putExtra("itemUUID", mItemUUID.toString());
             startActivity(intent);
-
-//            Bundle bundle = new Bundle();
-//            bundle.putString("itemUUID", "mItemUUID");
-//            ItemDetailsFragment fragobj = new ItemDetailsFragment();
-//            fragobj.setArguments(bundle);
-
         }
     }
 
