@@ -2,6 +2,7 @@ package com.inti.student.criminalintent;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -71,6 +72,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                                 int itemQty = itemQtyNp.getValue();
                                 itemPurchase = datasource.createItemPurchase(String.valueOf(itemUUID), itemQty, "pending");
                                 Toast.makeText(getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(ItemDetailsActivity.this,CartActivity.class));
                             }
                         })
                         .setNegativeButton("Cancel", null)

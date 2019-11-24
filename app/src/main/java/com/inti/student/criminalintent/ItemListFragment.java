@@ -1,6 +1,5 @@
 package com.inti.student.criminalintent;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,12 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 import java.util.UUID;
 
-public class TaskListFragment extends Fragment {
+public class ItemListFragment extends Fragment {
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
 
@@ -49,10 +47,6 @@ public class TaskListFragment extends Fragment {
         private int mImageID;
         private Item mItem;
         private UUID mItemUUID;
-        private String mItemName;
-        private String mItemCategory;
-        private String mItemPrice;
-        private String mItemDescription;
 
         public ItemHolder(View itemView) {
             super(itemView);
@@ -66,11 +60,6 @@ public class TaskListFragment extends Fragment {
         public void bindItem(Item item) {
             mItem = item;
             mItemUUID = mItem.getId();
-            mItemName = mItem.getName();
-            mItemCategory = mItem.getCategory();
-            mItemPrice = Integer.toString(mItem.getPrice());
-            mItemDescription = mItem.getDescription();
-
             mNameTextView.setText(mItem.getName());
             mCatTextView.setText(mItem.getCategory());
             mPriceTextView.setText("RM" + String.valueOf(mItem.getPrice()));
@@ -97,7 +86,7 @@ public class TaskListFragment extends Fragment {
         @Override
         public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.list_item, parent, false);
+            View view = layoutInflater.inflate(R.layout.item_list, parent, false);
             return new ItemHolder(view);
         }
 

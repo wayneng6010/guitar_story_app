@@ -52,8 +52,8 @@ public class ItemPurchaseDataSource {
                 + " = " + id, null);
     }
 
-    public List<ItemPurchase> getAllItemPurchase(){
-        List<ItemPurchase> comments = new ArrayList<ItemPurchase>();
+    public ArrayList<ItemPurchase> getAllItemPurchase(){
+        ArrayList<ItemPurchase> comments = new ArrayList<ItemPurchase>();
 
         Cursor cursor = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
                 null, null, null, null, null);
