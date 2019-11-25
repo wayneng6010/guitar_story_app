@@ -16,12 +16,17 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-
         if(fragment == null) {
             fragment = createFragment();
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
+
+    }
+
+    public void goToCart(android.view.View v) {
+        android.content.Intent intent = new android.content.Intent(getBaseContext(), CartActivity.class);
+        startActivity(intent);
     }
 }
