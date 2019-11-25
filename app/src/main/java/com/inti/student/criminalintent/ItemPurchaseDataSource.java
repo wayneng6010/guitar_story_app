@@ -37,9 +37,9 @@ public class ItemPurchaseDataSource {
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, itemQty);
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_STATUS, itemStatus);
 
-
         Cursor cursor_is_empty = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
                 null, null, null, null, null);
+
         cursor_is_empty.moveToFirst();
 
         if (cursor_is_empty.isAfterLast()) {
@@ -74,7 +74,15 @@ public class ItemPurchaseDataSource {
 
     }
 
-    public void deleteItemPurchase(ItemPurchase itemPurchase){
+    public void updateItemPurchase(String itemID, int itemQty) {
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_CART_ITEM_ID, itemID);
+        values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, itemQty);
+        values.put(MySQLiteHelper.COLUMN_CART_ITEM_STATUS, "pending");
+        database.update(MySQLiteHelper.TABLE_ITEM_PURCHASE, values, MySQLiteHelper.COLUMN_CART_ITEM_ID + "='" + itemID + "'", null);
+    }
+
+        public void deleteItemPurchase(ItemPurchase itemPurchase){
         long id = itemPurchase.getId();
         System.out.println("Comment deleted with id: " + id);
         database.delete(MySQLiteHelper.TABLE_ITEM_PURCHASE, MySQLiteHelper.COLUMN_ID

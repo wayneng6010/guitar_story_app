@@ -37,6 +37,9 @@ public class CartActivity extends AppCompatActivity {
 
         setContentView(R.layout.recyclerview_item_cart);
 
+        datasource = new ItemPurchaseDataSource(this);
+        datasource.open();
+
         listView = findViewById(R.id.itemCartView);
         mLayoutManager = new LinearLayoutManager(this);
         listView.setLayoutManager(mLayoutManager);
@@ -66,7 +69,7 @@ public class CartActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener, NumberPicker.OnValueChangeListener{
         private TextView mNameTextView;
         private TextView mCatTextView;
         private TextView mPriceTextView;
@@ -75,7 +78,7 @@ public class CartActivity extends AppCompatActivity {
         private String mImageName;
         private int mImageID;
         private ItemPurchase mItem;
-        private UUID mItemUUID;
+        private String itemId;
 
         public ItemHolder(View itemView) {
             super(itemView);
@@ -88,12 +91,13 @@ public class CartActivity extends AppCompatActivity {
             mQtyNumberPicker.setMaxValue(10);
             mQtyNumberPicker.setWrapSelectorWheel(true);
             itemView.setOnClickListener(this);
+            mQtyNumberPicker.setOnValueChangedListener(this);
         }
 
         public void bindItem(ItemPurchase item) {
             mItem = item;
 
-            String itemId = mItem.getItemId();
+            itemId = mItem.getItemId();
             Item item_info = itemLab.getItem(itemId);
 
             mNameTextView.setText(item_info.getName());
@@ -112,6 +116,14 @@ public class CartActivity extends AppCompatActivity {
 //            Intent intent = new Intent(view.getContext(),ItemDetailsActivity.class);
 //            intent.putExtra("itemUUID", mItemUUID.toString());
 //            startActivity(intent);
+        }
+
+
+
+        @Override
+        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+            datasource.updateItemPurchase(itemId, i1);
+            Toast.makeText(getApplicationContext(),"Saved",Toast.LENGTH_SHORT).show();
         }
     }
 
