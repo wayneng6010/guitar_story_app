@@ -6,10 +6,35 @@
     android:background="?android:attr/colorBackground"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimaryDark">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:text="Item"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+
+        <ImageView
+            android:id="@+id/details_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/cart_white_icon" />
+
+    </RelativeLayout>
+
     <ImageView
         android:id="@+id/details_item_image"
         android:layout_width="400dp"
-        android:layout_height="100dp"
+        android:layout_height="400dp"
         android:src="@drawable/ic_launcher_background" />
 
     <RelativeLayout
@@ -98,32 +123,32 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#f7f7f7"
-        android:layout_weight="1"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_weight="1"
+        android:background="#f7f7f7"
         android:gravity="bottom">
 
         <Button
             android:id="@+id/buy_now_btn"
             android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/add_to_cart_btn"
             android:backgroundTint="#229EE6"
-            android:textColor="@color/white"
-            android:text="Buy Now" />
+            android:text="Buy Now"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/add_to_cart_btn"
             android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:backgroundTint="@color/colorPrimaryDark"
-            android:textColor="@color/white"
-            android:text="Add to Cart" />
+            android:text="Add to Cart"
+            android:textColor="@color/white" />
 
     </RelativeLayout>
 

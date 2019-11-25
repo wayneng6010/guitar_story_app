@@ -52,7 +52,7 @@
                 android:paddingVertical="5dp"
                 android:layout_below="@+id/cart_item_category"
                 android:text="RM291"
-                android:textColor="#ff6b21"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
 

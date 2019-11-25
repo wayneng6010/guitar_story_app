@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -25,6 +27,14 @@ public class CartActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // hide default title bar
+        try
+        {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e){}
+
         setContentView(R.layout.recyclerview_item_cart);
 
         listView = findViewById(R.id.itemCartView);
@@ -38,7 +48,7 @@ public class CartActivity extends AppCompatActivity {
 //        for (ItemPurchase member : values){
 //            Log.i("Member name: ", String.valueOf(member.getStatus()));
 //        }
-        Toast.makeText(getApplicationContext(),values.toString(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),values.toString(),Toast.LENGTH_SHORT).show();
 
         mAdapter = new ItemAdapter(values);
         listView.setAdapter(mAdapter);

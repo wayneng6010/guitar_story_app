@@ -25,6 +25,14 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // hide default title bar
+        try
+        {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e){}
+
         setContentView(R.layout.item_details);
 
         datasource = new ItemPurchaseDataSource(this);
@@ -68,16 +76,25 @@ public class ItemDetailsActivity extends AppCompatActivity {
                         .setPositiveButton("Add to Cart", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                ItemPurchase itemPurchase = null;
+
                                 int itemQty = itemQtyNp.getValue();
-                                itemPurchase = datasource.createItemPurchase(String.valueOf(itemUUID), itemQty, "pending");
+                                datasource.createItemPurchase(String.valueOf(itemUUID), itemQty, "pending");
                                 Toast.makeText(getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(ItemDetailsActivity.this,CartActivity.class));
+                                //startActivity(new Intent(ItemDetailsActivity.this,CartActivity.class));
                             }
                         })
                         .setNegativeButton("Cancel", null)
                         .create();
                 dialog.show();
+            }
+        });
+
+        ImageView mCartImageView = (ImageView) findViewById(R.id.details_cart);
+        mCartImageView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ItemDetailsActivity.this,CartActivity.class));
             }
         });
     }

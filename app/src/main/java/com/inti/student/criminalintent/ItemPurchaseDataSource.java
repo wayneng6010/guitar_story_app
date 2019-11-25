@@ -5,8 +5,9 @@ import android.content.ContentValues;
         import android.database.Cursor;
         import android.database.SQLException;
         import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
         import java.util.List;
 
 public class ItemPurchaseDataSource {
@@ -30,19 +31,47 @@ public class ItemPurchaseDataSource {
         dbHelper.close();
     }
 
-    public ItemPurchase createItemPurchase(String itemID, int itemQty, String itemStatus){
+    public void createItemPurchase(String itemID, int itemQty, String itemStatus){
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_ID, itemID);
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, itemQty);
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_STATUS, itemStatus);
-        long insertId = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
-                MySQLiteHelper.COLUMN_ID + " = " + insertId, null,
-                null, null, null);
-        cursor.moveToFirst();
-        ItemPurchase newComment = cursorToItemPurchase(cursor);
-        cursor.close();
-        return newComment;
+
+
+        Cursor cursor_is_empty = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
+                null, null, null, null, null);
+        cursor_is_empty.moveToFirst();
+
+        if (cursor_is_empty.isAfterLast()) {
+            cursor_is_empty.close();
+            long insertId = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
+        } else {
+            Cursor cursor_item_exist = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
+                    MySQLiteHelper.COLUMN_CART_ITEM_ID + "='" + itemID + "'", null, null, null, null);
+
+            cursor_item_exist.moveToFirst();
+
+            if (cursor_item_exist.isAfterLast()) {
+                long insertId = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
+            } else {
+                int current_qty = cursor_item_exist.getInt(2);
+                values.clear();
+                values.put(MySQLiteHelper.COLUMN_CART_ITEM_ID, itemID);
+                values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, current_qty + itemQty);
+                values.put(MySQLiteHelper.COLUMN_CART_ITEM_STATUS, itemStatus);
+                database.update(MySQLiteHelper.TABLE_ITEM_PURCHASE, values, MySQLiteHelper.COLUMN_CART_ITEM_ID + "='" + itemID + "'", null);
+            }
+
+        }
+
+//        Cursor cursor = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
+//                MySQLiteHelper.COLUMN_ID + " = " + insertId, null,
+//                null, null, null);
+//        cursor.moveToFirst();
+//        ItemPurchase newItemPurchase = cursorToItemPurchase(cursor);
+//        cursor.close();
+//        return newItemPurchase;
+
     }
 
     public void deleteItemPurchase(ItemPurchase itemPurchase){
