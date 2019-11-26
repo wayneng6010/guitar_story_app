@@ -44,10 +44,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
         TextView mCategoryView = (TextView) findViewById(R.id.details_item_cat);
         TextView mDescriptionView = (TextView) findViewById(R.id.details_item_description);
 
-        final String itemUUID = getIntent().getStringExtra("itemUUID");
+        final String itemId = getIntent().getStringExtra("itemId");
 
         ItemLab itemLab = ItemLab.get(this);
-        Item item = itemLab.getItem(itemUUID);
+        Item item = itemLab.getItem(itemId);
 
         String mImageName = item.getImageName();
         int mImageID = getResources().getIdentifier(mImageName, "drawable", "com.inti.student.criminalintent");
@@ -78,7 +78,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 int itemQty = itemQtyNp.getValue();
-                                datasource.createItemPurchase(String.valueOf(itemUUID), itemQty, "pending");
+                                datasource.createItemPurchase(itemId, itemQty, "pending");
                                 Toast.makeText(getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
                                 //startActivity(new Intent(ItemDetailsActivity.this,CartActivity.class));
                             }
@@ -97,5 +97,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 startActivity(new Intent(ItemDetailsActivity.this,CartActivity.class));
             }
         });
+
+
     }
 }

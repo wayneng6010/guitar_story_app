@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.UUID;
 
 public class ItemListFragment extends Fragment {
     private RecyclerView mItemRecyclerView;
@@ -46,7 +45,7 @@ public class ItemListFragment extends Fragment {
         private String mImageName;
         private int mImageID;
         private Item mItem;
-        private String mItemUUID;
+        private String mItemId;
 
         public ItemHolder(View itemView) {
             super(itemView);
@@ -59,7 +58,7 @@ public class ItemListFragment extends Fragment {
 
         public void bindItem(Item item) {
             mItem = item;
-            mItemUUID = mItem.getId();
+            mItemId = mItem.getId();
             mNameTextView.setText(mItem.getName());
             mCatTextView.setText(mItem.getCategory());
             mPriceTextView.setText("RM" + String.valueOf(mItem.getPrice()));
@@ -72,7 +71,7 @@ public class ItemListFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(view.getContext(),ItemDetailsActivity.class);
-            intent.putExtra("itemUUID", mItemUUID.toString());
+            intent.putExtra("itemId", mItemId);
             startActivity(intent);
         }
     }

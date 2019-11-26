@@ -44,7 +44,7 @@ public class ItemPurchaseDataSource {
 
         if (cursor_is_empty.isAfterLast()) {
             cursor_is_empty.close();
-            long insertId = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
+            database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
         } else {
             Cursor cursor_item_exist = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
                     MySQLiteHelper.COLUMN_CART_ITEM_ID + "='" + itemID + "'", null, null, null, null);
@@ -52,14 +52,13 @@ public class ItemPurchaseDataSource {
             cursor_item_exist.moveToFirst();
 
             if (cursor_item_exist.isAfterLast()) {
-                long insertId = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
+                database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
             } else {
+                long cartItemId = cursor_item_exist.getInt(0);
                 int current_qty = cursor_item_exist.getInt(2);
                 values.clear();
-                values.put(MySQLiteHelper.COLUMN_CART_ITEM_ID, itemID);
                 values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, current_qty + itemQty);
-                values.put(MySQLiteHelper.COLUMN_CART_ITEM_STATUS, itemStatus);
-                database.update(MySQLiteHelper.TABLE_ITEM_PURCHASE, values, MySQLiteHelper.COLUMN_CART_ITEM_ID + "='" + itemID + "'", null);
+                database.update(MySQLiteHelper.TABLE_ITEM_PURCHASE, values, MySQLiteHelper.COLUMN_ID + "='" + cartItemId + "'", null);
             }
 
         }
@@ -74,15 +73,14 @@ public class ItemPurchaseDataSource {
 
     }
 
-    public void updateItemPurchase(String itemID, int itemQty) {
+    public void updateItemPurchase(long cartItemId, int itemQty) {
         ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_CART_ITEM_ID, itemID);
+        values.put(MySQLiteHelper.COLUMN_ID, cartItemId);
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, itemQty);
-        values.put(MySQLiteHelper.COLUMN_CART_ITEM_STATUS, "pending");
-        database.update(MySQLiteHelper.TABLE_ITEM_PURCHASE, values, MySQLiteHelper.COLUMN_CART_ITEM_ID + "='" + itemID + "'", null);
+        database.update(MySQLiteHelper.TABLE_ITEM_PURCHASE, values, MySQLiteHelper.COLUMN_ID + "='" + cartItemId + "'", null);
     }
 
-        public void deleteItemPurchase(ItemPurchase itemPurchase){
+    public void deleteItemPurchase(ItemPurchase itemPurchase){
         long id = itemPurchase.getId();
         System.out.println("Comment deleted with id: " + id);
         database.delete(MySQLiteHelper.TABLE_ITEM_PURCHASE, MySQLiteHelper.COLUMN_ID
