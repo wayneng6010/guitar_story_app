@@ -28,7 +28,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + TABLE_ITEM_PURCHASE + "( " + COLUMN_ID
             + " integer primary key autoincrement, " + COLUMN_CART_ITEM_ID
             + " text not null," + COLUMN_CART_ITEM_QTY
-            + " text not null," + COLUMN_CART_ITEM_STATUS
+            + " integer not null," + COLUMN_CART_ITEM_STATUS
             + " text not null);";
 
     // Database creation sql statement

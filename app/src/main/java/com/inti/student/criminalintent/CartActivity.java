@@ -138,28 +138,22 @@ public class CartActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-
-            //switch (view.getId()) {
-
-            //case R.id.cart_item_view:
             Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
             intent.putExtra("itemId", itemId);
             startActivity(intent);
-            //break;
-
-            //case R.id.cart_delete_image_view:
-
-            //break;
-
-            //default:
-            // break;
-            //}
         }
 
         @Override
         public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-            datasource.updateItemPurchase(cartItemId, i1);
-            Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+            int result = datasource.updateItemPurchase(cartItemId, i1);
+            switch (result){
+                case 1:
+                    Toast.makeText(getApplicationContext(),"Saved",Toast.LENGTH_SHORT).show();
+                    break;
+                case 0:
+                    Toast.makeText(getApplicationContext(),"Failed to save",Toast.LENGTH_LONG).show();
+                    break;
+            }
 
             ArrayList<ItemPurchase> values = datasource.getAllItemPurchase();
             for (ItemPurchase member : values) {

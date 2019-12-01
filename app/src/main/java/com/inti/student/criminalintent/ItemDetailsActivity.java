@@ -62,8 +62,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
         mAddToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //  Intent i = new Intent(MainActivity.this, AddActivity.class);
-                //startActivityForResult(i, 1);
                 final NumberPicker itemQtyNp = new NumberPicker(ItemDetailsActivity.this);
                 itemQtyNp.setMinValue(1);
                 itemQtyNp.setMaxValue(10);
@@ -78,9 +76,16 @@ public class ItemDetailsActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 int itemQty = itemQtyNp.getValue();
-                                datasource.createItemPurchase(itemId, itemQty, "pending");
-                                Toast.makeText(getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
-                                //startActivity(new Intent(ItemDetailsActivity.this,CartActivity.class));
+                                int result = datasource.createItemPurchase(itemId, itemQty, "pending");
+
+                                switch (result){
+                                    case 1:
+                                        Toast.makeText(getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 0:
+                                        Toast.makeText(getApplicationContext(),"Error occurred, please try again",Toast.LENGTH_LONG).show();
+                                        break;
+                                }
                             }
                         })
                         .setNegativeButton("Cancel", null)
