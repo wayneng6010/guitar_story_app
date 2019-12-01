@@ -6,21 +6,38 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
+    // item purchase table
     public static final String TABLE_ITEM_PURCHASE = "item_purchase";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_CART_ITEM_ID = "itemId";
     public static final String COLUMN_CART_ITEM_QTY = "itemQty";
     public static final String COLUMN_CART_ITEM_STATUS = "itemStatus";
 
+    // user table
+    public static final String TABLE_USER = "user";
+    public static final String COLUMN_USER_NAME = "userName";
+    public static final String COLUMN_USER_EMAIL = "userEmail";
+    public static final String COLUMN_USER_PASSWORD = "userPassword";
+    public static final String COLUMN_USER_ADDRESS = "userAddress";
+
     private static final String DATABASE_NAME = "items.db";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table "
+    private static final String DATABASE_CREATE_ITEM_PURCHASE = "create table "
             + TABLE_ITEM_PURCHASE + "( " + COLUMN_ID
             + " integer primary key autoincrement, " + COLUMN_CART_ITEM_ID
             + " text not null," + COLUMN_CART_ITEM_QTY
             + " text not null," + COLUMN_CART_ITEM_STATUS
+            + " text not null);";
+
+    // Database creation sql statement
+    private static final String DATABASE_CREATE_USER = "create table "
+            + TABLE_USER + "( " + COLUMN_ID
+            + " integer primary key autoincrement, " + COLUMN_USER_NAME
+            + " text not null," + COLUMN_USER_EMAIL
+            + " text not null," + COLUMN_USER_PASSWORD
+            + " text not null," + COLUMN_USER_ADDRESS
             + " text not null);";
 
     public MySQLiteHelper(Context context){
@@ -29,7 +46,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database){
-        database.execSQL(DATABASE_CREATE);
+        database.execSQL(DATABASE_CREATE_ITEM_PURCHASE);
+        database.execSQL(DATABASE_CREATE_USER);
     }
 
     @Override
