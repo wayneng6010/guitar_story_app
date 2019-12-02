@@ -76,7 +76,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 int itemQty = itemQtyNp.getValue();
-                                int result = datasource.createItemPurchase(itemId, itemQty, "pending");
+                                int result = datasource.createItemPurchase(itemId, itemQty);
 
                                 switch (result){
                                     case 1:

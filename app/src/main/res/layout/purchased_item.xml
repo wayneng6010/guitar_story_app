@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="120dp"
     android:background="?attr/colorBackgroundFloating"
-    tools:context=".CartActivity">
+    tools:context=".PurchasedItemActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/cart_item_image"
+            android:id="@+id/purchased_item_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerVertical="true"
@@ -29,7 +29,7 @@
             android:paddingRight="10dp">
 
             <TextView
-                android:id="@+id/cart_item_name"
+                android:id="@+id/purchased_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="5dp"
@@ -37,20 +37,20 @@
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/cart_item_category"
+                android:id="@+id/purchased_item_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="5dp"
-                android:layout_below="@+id/cart_item_name"
+                android:layout_below="@+id/purchased_item_name"
                 android:text="Category | Acoustic Guitar"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/cart_item_price"
+                android:id="@+id/purchased_item_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="5dp"
-                android:layout_below="@+id/cart_item_category"
+                android:layout_below="@+id/purchased_item_category"
                 android:text="RM291"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
@@ -58,13 +58,14 @@
 
         </RelativeLayout>
 
-        <NumberPicker
-            android:id="@+id/cart_quantity_np"
-            android:layout_margin="15dp"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+        <TextView
+            android:id="@+id/purchased_item_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/purchased_item_upper_layout"
+            android:layout_marginLeft="25dp"
+            android:layout_centerVertical="true"
+            android:text="x1"/>
 
     </RelativeLayout>
 

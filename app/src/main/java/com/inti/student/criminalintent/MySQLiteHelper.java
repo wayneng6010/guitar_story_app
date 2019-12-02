@@ -12,6 +12,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_CART_ITEM_ID = "itemId";
     public static final String COLUMN_CART_ITEM_QTY = "itemQty";
     public static final String COLUMN_CART_ITEM_STATUS = "itemStatus";
+    public static final String COLUMN_CART_USER_ID = "itemUserId";
 
     // user table
     public static final String TABLE_USER = "user";
@@ -29,6 +30,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + " integer primary key autoincrement, " + COLUMN_CART_ITEM_ID
             + " text not null," + COLUMN_CART_ITEM_QTY
             + " integer not null," + COLUMN_CART_ITEM_STATUS
+            + " text not null," + COLUMN_CART_USER_ID
             + " text not null);";
 
     // Database creation sql statement

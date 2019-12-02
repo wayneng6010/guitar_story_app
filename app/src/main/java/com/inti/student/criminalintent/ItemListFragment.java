@@ -1,6 +1,7 @@
 package com.inti.student.criminalintent;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ItemListFragment extends Fragment {
     private RecyclerView mItemRecyclerView;

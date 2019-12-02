@@ -10,8 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,9 @@ public class CartActivity extends AppCompatActivity {
     private ItemLab itemLab = ItemLab.get(this);
     private int priceCounter = 0;
     private TextView mCartTotalAmountTextView;
+    private Button mCheckoutBtn;
+    private RelativeLayout mEmptyCartLayout;
+    private ImageView mDeleteImageView;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,20 +50,32 @@ public class CartActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         listView.setLayoutManager(mLayoutManager);
 
-        ArrayList<ItemPurchase> values = datasource.getAllItemPurchase();
+        // get all cart item from database
+        ArrayList<ItemPurchase> values = datasource.getAllCartItem();
         for (ItemPurchase member : values) {
-            Item item_info = itemLab.getItem(member.getItemId());
+            Item item_info = itemLab.getItem(member.getItemId());// get item object with item id
             priceCounter += item_info.getPrice() * member.getQty();
         }
         mCartTotalAmountTextView = (TextView) findViewById(R.id.cart_total_amount);
         mCartTotalAmountTextView.setText("Total: RM" + Integer.toString(priceCounter));
+
+        mCheckoutBtn = (Button) findViewById(R.id.cart_checkout_button);
+        mEmptyCartLayout = (RelativeLayout) findViewById(R.id.cart_empty_layout);
+        mDeleteImageView = (ImageView) findViewById(R.id.cart_delete_image_view);
+        if (values.size() == 0){ // if the cart is empty
+            mEmptyCartLayout.setVisibility(View.VISIBLE);
+            mDeleteImageView.setVisibility(View.GONE);
+        } else {
+            mEmptyCartLayout.setVisibility(View.GONE);
+            mDeleteImageView.setVisibility(View.VISIBLE);
+        }
+
         priceCounter = 0;
         //Toast.makeText(getApplicationContext(),values.toString(),Toast.LENGTH_SHORT).show();
 
         mAdapter = new ItemAdapter(values);
         listView.setAdapter(mAdapter);
 
-        ImageView mDeleteImageView = (ImageView) findViewById(R.id.cart_delete_image_view);
         mDeleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,10 +86,65 @@ public class CartActivity extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Toast.makeText(CartActivity.this, "Deleting", Toast.LENGTH_SHORT).show();
+                                int result = datasource.deleteItemPurchase();
+                                switch (result) {
+                                    case 1:
+                                        Toast.makeText(getApplicationContext(), "Clear successful", Toast.LENGTH_LONG).show();
+                                        break;
+                                    case 0:
+                                        Toast.makeText(getApplicationContext(), "Failed to clear the cart", Toast.LENGTH_LONG).show();
+                                        break;
+                                }
+                                // refresh the activity
+                                finish();
+                                startActivity(getIntent());
                             }
                         })
                         .setNegativeButton(android.R.string.no, null).show();
+            }
+        });
+
+        mCheckoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int total_price = 0;
+                // get all cart item from database
+                ArrayList<ItemPurchase> values = datasource.getAllCartItem();
+                for (ItemPurchase member : values) {
+                    Item item_info = itemLab.getItem(member.getItemId());// get item object with item id
+                    total_price += item_info.getPrice() * member.getQty();
+                }
+
+                if (values.size() == 0){ // if the cart is empty
+                    Toast.makeText(getApplicationContext(),"Please add something to the cart",Toast.LENGTH_LONG).show();
+                } else {
+                    new AlertDialog.Builder(CartActivity.this)
+                            .setTitle("Checkout Confirmation")
+                            .setMessage("Total payment amount: RM" + Integer.toString(total_price))
+                            .setIcon(android.R.drawable.ic_dialog_info)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    int result = datasource.checkoutItemPurchase();
+                                    switch (result) {
+                                        case 1:
+                                            Toast.makeText(getApplicationContext(), "Checkout successful", Toast.LENGTH_LONG).show();
+                                            break;
+                                        case 0:
+                                            Toast.makeText(getApplicationContext(), "Failed to checkout", Toast.LENGTH_LONG).show();
+                                            break;
+                                    }
+                                    // refresh the activity
+                                    finish();
+                                    Intent intent = new Intent(getBaseContext(), PurchasedItemActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
+                }
+
+
             }
         });
     }
@@ -95,7 +167,6 @@ public class CartActivity extends AppCompatActivity {
         private TextView mPriceTextView;
         private ImageView mItemImageView;
         private NumberPicker mQtyNumberPicker;
-        //private ImageView mDeleteImageView;
         private ItemPurchase mItem;
         private String itemId;
         private long cartItemId;
@@ -109,13 +180,11 @@ public class CartActivity extends AppCompatActivity {
             mPriceTextView = (TextView) itemView.findViewById(R.id.cart_item_price);
             mItemImageView = (ImageView) itemView.findViewById(R.id.cart_item_image);
             mQtyNumberPicker = (NumberPicker) itemView.findViewById(R.id.cart_quantity_np);
-            //mDeleteImageView = (ImageView) itemView.findViewById(R.id.cart_delete_image_view);
             mQtyNumberPicker.setMinValue(1);
             mQtyNumberPicker.setMaxValue(10);
             mQtyNumberPicker.setWrapSelectorWheel(true);
             itemView.setOnClickListener(this);
             mQtyNumberPicker.setOnValueChangedListener(this);
-            //mDeleteImageView.setOnClickListener(this);
         }
 
         public void bindItem(ItemPurchase item) {
@@ -137,29 +206,32 @@ public class CartActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), ItemDetailsActivity.class);
             intent.putExtra("itemId", itemId);
             startActivity(intent);
         }
 
+
         @Override
         public void onValueChange(NumberPicker numberPicker, int i, int i1) {
             int result = datasource.updateItemPurchase(cartItemId, i1);
-            switch (result){
+            switch (result) {
                 case 1:
-                    Toast.makeText(getApplicationContext(),"Saved",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
                     break;
                 case 0:
-                    Toast.makeText(getApplicationContext(),"Failed to save",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Failed to save", Toast.LENGTH_LONG).show();
                     break;
             }
 
-            ArrayList<ItemPurchase> values = datasource.getAllItemPurchase();
+            // collect price and quantity of each item to calculate total price
+            ArrayList<ItemPurchase> values = datasource.getAllCartItem();
             for (ItemPurchase member : values) {
-                Item item_info = itemLab.getItem(member.getItemId());
+                Item item_info = itemLab.getItem(member.getItemId()); // get item object with item id
                 priceCounter += item_info.getPrice() * member.getQty();
             }
+            // update value of total amount text view
             mCartTotalAmountTextView = (TextView) findViewById(R.id.cart_total_amount);
             mCartTotalAmountTextView.setText("Total: RM" + Integer.toString(priceCounter));
             priceCounter = 0;

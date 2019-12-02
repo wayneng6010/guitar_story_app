@@ -20,9 +20,9 @@
             android:id="@+id/cart_delete_image_view"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/delete_icon"/>
+            android:layout_centerVertical="true"
+            android:src="@drawable/delete_icon" />
 
     </RelativeLayout>
 
@@ -32,6 +32,22 @@
         android:layout_height="match_parent"
         android:layout_marginTop="70dp"
         android:layout_marginBottom="60dp"/>
+
+    <RelativeLayout
+        android:id="@+id/cart_empty_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="The cart is empty"
+            android:textSize="16sp"
+            android:textAlignment="center"/>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -48,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/add_to_cart_btn"
+            android:layout_toLeftOf="@+id/cart_checkout_button"
             android:layout_marginRight="10dp"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
@@ -56,7 +72,7 @@
             android:text="Total: RM1000"/>
 
         <Button
-            android:id="@+id/add_to_cart_btn"
+            android:id="@+id/cart_checkout_button"
             android:layout_width="150dp"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"

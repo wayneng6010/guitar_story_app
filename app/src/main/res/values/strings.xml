@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Guitar Story</string>
     <string name="cart_text">Cart</string>
-    <string name="item_purchase_text">Purchased Item</string>
+    <string name="item_purchase_text">My Purchases</string>
 </resources>

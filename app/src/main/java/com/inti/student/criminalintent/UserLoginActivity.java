@@ -2,6 +2,7 @@ package com.inti.student.criminalintent;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,14 @@ public class UserLoginActivity extends AppCompatActivity {
     private TextView mRegisterLblTextView;
     private RelativeLayout mLoginContentLayout;
     private RelativeLayout mRegisterContentLayout;
+
+    // login
+    private EditText mLoginEmailEditText;
+    private EditText mLoginPasswordEditText;
+    private String mLoginEmail;
+    private String mLoginPassword;
+
+    // register
     private EditText mRegNameEditText;
     private EditText mRegEmailEditText;
     private EditText mRegPasswordEditText;
@@ -41,7 +50,7 @@ public class UserLoginActivity extends AppCompatActivity {
         } catch (NullPointerException e) {
         }
 
-        setContentView(R.layout.activity_user_login);
+        setContentView(R.layout.user_login);
 
         datasource = new UserDataSource(this);
         datasource.open();
@@ -98,6 +107,11 @@ public class UserLoginActivity extends AppCompatActivity {
             errorMessage += "Name input is too long. Maximum 30 characters.\n";
         }
 
+        if (mRegName.matches(".*\\d.*")) { // if mRegName contains numbers
+            validate = false;
+            errorMessage += "Name should not contain numbers\n";
+        }
+
         if (mRegEmail.matches("")) {
             validate = false;
             errorMessage += "Email input is empty\n";
@@ -134,11 +148,6 @@ public class UserLoginActivity extends AppCompatActivity {
             errorMessage += "Password input is too long. Maximum 20 characters.\n";
         }
 
-        if (mRegName.matches(".*\\d.*")) { // if mRegName contains numbers
-            validate = false;
-            errorMessage += "Name should not contain numbers\n";
-        }
-
         if (mRegCPassword.matches("")) {
             validate = false;
             errorMessage += "Confirm password input is empty\n";
@@ -158,6 +167,7 @@ public class UserLoginActivity extends AppCompatActivity {
                     mRegPasswordEditText.setText("");
                     mRegCPasswordEditText.setText("");
                     mLoginLblTextView.performClick();
+
                     break;
                 case 0:
                     Toast.makeText(getApplicationContext(), "Register failed, please try again", Toast.LENGTH_LONG).show();
@@ -180,4 +190,68 @@ public class UserLoginActivity extends AppCompatActivity {
         }
     }
 
-}
+    public void login(View v) {
+        mLoginEmailEditText = (EditText) findViewById(R.id.user_login_email);
+        mLoginEmail = mLoginEmailEditText.getText().toString();
+
+        mLoginPasswordEditText = (EditText) findViewById(R.id.user_login_password);
+        mLoginPassword = mLoginPasswordEditText.getText().toString();
+
+        boolean validate = true;
+        String errorMessage = "";
+
+        // input validation
+        // check if input is empty
+        if (mLoginEmail.matches("")) {
+            validate = false;
+            errorMessage += "Email input is empty\n";
+        }
+
+        if (mLoginPassword.matches("")) {
+            validate = false;
+            errorMessage += "Password input is empty\n";
+        }
+
+        if (validate) {
+            int result = datasource.getUserLoginDetails(mLoginEmail, mLoginPassword);
+//            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+
+            switch (result) {
+                case 1:
+                    Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
+                    mLoginEmailEditText.setText("");
+                    mLoginPasswordEditText.setText("");
+
+                    Intent intent = new Intent(getApplicationContext(), ItemListActivityItemList.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // clean up all activities
+
+                    startActivity(intent);
+
+                    break;
+                case 0:
+                    Toast.makeText(getApplicationContext(), "Email or password is incorrect", Toast.LENGTH_LONG).show();
+                    break;
+                case 2:
+                    Toast.makeText(getApplicationContext(), "Email not found", Toast.LENGTH_LONG).show();
+                    break;
+            }
+        } else {
+            AlertDialog dialog = new AlertDialog.Builder(UserLoginActivity.this)
+                    .setTitle("Invalid Input")
+                    .setMessage(errorMessage.substring(0, errorMessage.length() - 1))
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    })
+                    .create();
+            dialog.show();
+        }
+
+//        for (User member : values) {
+//            String email = member.getEmail();
+//            String password = member.getPassword();
+//        }
+    }
+
+    }
