@@ -222,7 +222,7 @@ public class UserLoginActivity extends AppCompatActivity {
                     mLoginEmailEditText.setText("");
                     mLoginPasswordEditText.setText("");
 
-                    Intent intent = new Intent(getApplicationContext(), ItemListActivityItemList.class);
+                    Intent intent = new Intent(getApplicationContext(), ItemListActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // clean up all activities
 
                     startActivity(intent);
@@ -248,10 +248,6 @@ public class UserLoginActivity extends AppCompatActivity {
             dialog.show();
         }
 
-//        for (User member : values) {
-//            String email = member.getEmail();
-//            String password = member.getPassword();
-//        }
     }
 
     }

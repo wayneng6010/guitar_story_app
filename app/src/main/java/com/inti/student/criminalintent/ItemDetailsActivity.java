@@ -3,6 +3,7 @@ package com.inti.student.criminalintent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -22,6 +23,8 @@ import java.util.UUID;
 public class ItemDetailsActivity extends AppCompatActivity {
 
     private ItemPurchaseDataSource datasource;
+
+    private int mItemPrice;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         mImageView.setImageResource(mImageID);
 
         mPriceView.setText("RM" + item.getPrice());
+        mItemPrice = item.getPrice();
         mItemNameView.setText(item.getName());
         mCategoryView.setText(item.getCategory());
         mDescriptionView.setText(item.getDescription());
@@ -62,35 +66,105 @@ public class ItemDetailsActivity extends AppCompatActivity {
         mAddToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final NumberPicker itemQtyNp = new NumberPicker(ItemDetailsActivity.this);
-                itemQtyNp.setMinValue(1);
-                itemQtyNp.setMaxValue(10);
-                itemQtyNp.setWrapSelectorWheel(true);
+                SharedPreferences prefs = getSharedPreferences("LoginSession", MODE_PRIVATE);
+                boolean isLogin = prefs.getBoolean("login", false); // retrieve login session saved in preference
 
-                AlertDialog dialog = new AlertDialog.Builder(ItemDetailsActivity.this)
-                        .setTitle("Add to Cart")
-                        .setMessage("Quantity")
-                        .setView(itemQtyNp)
-                        .setPositiveButton("Add to Cart", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+                if (isLogin){
+                    final NumberPicker itemQtyNp = new NumberPicker(ItemDetailsActivity.this);
+                    itemQtyNp.setMinValue(1);
+                    itemQtyNp.setMaxValue(10);
+                    itemQtyNp.setWrapSelectorWheel(true);
 
-                                int itemQty = itemQtyNp.getValue();
-                                int result = datasource.createItemPurchase(itemId, itemQty);
+                    AlertDialog dialog = new AlertDialog.Builder(ItemDetailsActivity.this)
+                            .setTitle("Add to Cart")
+                            .setMessage("Quantity")
+                            .setView(itemQtyNp)
+                            .setPositiveButton("Add to Cart", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
 
-                                switch (result){
-                                    case 1:
-                                        Toast.makeText(getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case 0:
-                                        Toast.makeText(getApplicationContext(),"Error occurred, please try again",Toast.LENGTH_LONG).show();
-                                        break;
+                                    int itemQty = itemQtyNp.getValue();
+                                    int result = datasource.createItemPurchase(itemId, itemQty);
+
+                                    switch (result){
+                                        case 1:
+                                            Toast.makeText(getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
+                                            break;
+                                        case 0:
+                                            Toast.makeText(getApplicationContext(),"Error occurred, please try again",Toast.LENGTH_LONG).show();
+                                            break;
+                                    }
                                 }
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                dialog.show();
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .create();
+                    dialog.show();
+                } else {
+                    Toast.makeText(getApplicationContext(),"Please login first",Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(ItemDetailsActivity.this, UserLoginActivity.class));
+                }
+
+            }
+        });
+
+        Button mBuyNowBtn = (Button) findViewById(R.id.buy_now_btn);
+        mBuyNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences prefs = getSharedPreferences("LoginSession", MODE_PRIVATE);
+                boolean isLogin = prefs.getBoolean("login", false); // retrieve login session saved in preference
+
+                if (isLogin){
+                    final NumberPicker itemQtyNp = new NumberPicker(ItemDetailsActivity.this);
+                    itemQtyNp.setMinValue(1);
+                    itemQtyNp.setMaxValue(10);
+                    itemQtyNp.setWrapSelectorWheel(true);
+
+                    AlertDialog dialog = new AlertDialog.Builder(ItemDetailsActivity.this)
+                            .setTitle("Buy Now")
+                            .setMessage("Quantity")
+                            .setView(itemQtyNp)
+                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    final int itemQty = itemQtyNp.getValue();
+
+                                    new android.support.v7.app.AlertDialog.Builder(ItemDetailsActivity.this)
+                                            .setTitle("Checkout Confirmation")
+                                            .setMessage("Total payment amount: RM" + (mItemPrice * itemQty))
+                                            .setIcon(android.R.drawable.ic_dialog_info)
+                                            .setPositiveButton("Confirm Payment", new DialogInterface.OnClickListener() {
+
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                                    int result = datasource.checkoutOneItem(itemId, itemQty);
+
+                                                    switch (result){
+                                                        case 1:
+                                                            Toast.makeText(getApplicationContext(),"Checkout successful",Toast.LENGTH_SHORT).show();
+                                                            break;
+                                                        case 0:
+                                                            Toast.makeText(getApplicationContext(),"Failed to checkout",Toast.LENGTH_LONG).show();
+                                                            break;
+                                                    }
+                                                    // clear activity
+                                                    finish();
+                                                    Intent intent = new Intent(getBaseContext(), PurchasedItemActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            })
+                                            .setNegativeButton("Cancel", null).show();
+
+                                }
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .create();
+                    dialog.show();
+                } else {
+                    Toast.makeText(getApplicationContext(),"Please login first",Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(ItemDetailsActivity.this, UserLoginActivity.class));
+                }
+
             }
         });
 

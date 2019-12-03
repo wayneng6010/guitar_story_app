@@ -96,7 +96,7 @@ public class CartActivity extends AppCompatActivity {
                                         break;
                                 }
                                 // refresh the activity
-                                finish();
+                                finish(); // clear activity
                                 startActivity(getIntent());
                             }
                         })
@@ -123,7 +123,7 @@ public class CartActivity extends AppCompatActivity {
                             .setTitle("Checkout Confirmation")
                             .setMessage("Total payment amount: RM" + Integer.toString(total_price))
                             .setIcon(android.R.drawable.ic_dialog_info)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            .setPositiveButton("Confirm Payment", new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
                                     int result = datasource.checkoutItemPurchase();
@@ -135,13 +135,13 @@ public class CartActivity extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "Failed to checkout", Toast.LENGTH_LONG).show();
                                             break;
                                     }
-                                    // refresh the activity
+                                    // clear activity
                                     finish();
                                     Intent intent = new Intent(getBaseContext(), PurchasedItemActivity.class);
                                     startActivity(intent);
                                 }
                             })
-                            .setNegativeButton(android.R.string.no, null).show();
+                            .setNegativeButton("Cancel", null).show();
                 }
 
 

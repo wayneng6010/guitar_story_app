@@ -22,10 +22,13 @@ public class UserDataSource {
             MySQLiteHelper.COLUMN_USER_PASSWORD,
             MySQLiteHelper.COLUMN_USER_ADDRESS};
     private Context mContext;
+    private Long userId;
 
     public UserDataSource(Context context){
         dbHelper = new MySQLiteHelper(context);
         mContext = context;
+        SharedPreferences prefs = context.getSharedPreferences("LoginSession", MODE_PRIVATE);
+        userId = prefs.getLong("userId", 0); //SessionId that you saved in preference
     }
 
     public void open() throws SQLException{
@@ -90,6 +93,61 @@ public class UserDataSource {
 
     }
 
+    public int updatePersonalInfo(String name, String email, String address){
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_USER_NAME, name);
+        values.put(MySQLiteHelper.COLUMN_USER_EMAIL, email);
+        values.put(MySQLiteHelper.COLUMN_USER_ADDRESS, address);
+
+        long rowInserted = database.update(MySQLiteHelper.TABLE_USER, values, MySQLiteHelper.COLUMN_ID + "='" + userId + "'", null);
+
+        if(rowInserted != -1) { // if insert is successful
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public int changePassword(String currentPsw, String newPsw){
+        String correctPsw = "";
+        // retrieve current account password
+        ArrayList<User> values = getUserInfo();
+        for (User member : values) {
+            correctPsw = member.getPassword();
+        }
+
+        if (currentPsw.equals(correctPsw)){ // if password is correct
+            ContentValues value = new ContentValues();
+            value.put(MySQLiteHelper.COLUMN_USER_PASSWORD, newPsw);
+            database.update(MySQLiteHelper.TABLE_USER, value, MySQLiteHelper.COLUMN_ID + "='" + userId + "'", null);
+
+            // clear session
+            SharedPreferences.Editor editor = mContext.getSharedPreferences("LoginSession", MODE_PRIVATE).edit();
+            editor.putBoolean("login", false);
+            editor.putLong("userId", 0);
+            editor.apply();
+
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public ArrayList<User> getUserInfo(){
+        ArrayList<User> userInfo = new ArrayList<User>();
+
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_USER, allColumns,
+                MySQLiteHelper.COLUMN_ID + "='" + userId + "'", null, null, null, null);
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()){
+            User user = cursorToUser(cursor);
+            userInfo.add(user);
+        }
+        cursor.close();
+
+        return userInfo;
+    }
+
     public void updateItemPurchase(long cartItemId, int itemQty) {
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_ID, cartItemId);
@@ -103,6 +161,7 @@ public class UserDataSource {
         database.delete(MySQLiteHelper.TABLE_ITEM_PURCHASE, MySQLiteHelper.COLUMN_ID
                 + " = " + id, null);
     }
+
 
     public ArrayList<User> getAllItemPurchase(){
         ArrayList<User> users = new ArrayList<User>();

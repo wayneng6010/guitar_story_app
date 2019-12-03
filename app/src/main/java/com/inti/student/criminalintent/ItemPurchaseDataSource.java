@@ -101,7 +101,23 @@ public class ItemPurchaseDataSource {
         }
     }
 
-    public int updateItemPurchase(long cartItemId, int itemQty) {
+    public int checkoutOneItem(String itemID, int itemQty) {
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_CART_ITEM_ID, itemID);
+        values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, itemQty);
+        values.put(MySQLiteHelper.COLUMN_CART_ITEM_STATUS, "paid");
+        values.put(MySQLiteHelper.COLUMN_CART_USER_ID, mUserId);
+
+        long rowInserted = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
+
+        if(rowInserted != -1) { // if insert is successful
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+        public int updateItemPurchase(long cartItemId, int itemQty) {
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_ID, cartItemId);
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, itemQty);
