@@ -225,6 +225,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     Toast.makeText(getApplicationContext(), "Change password successful", Toast.LENGTH_LONG).show();
 
+                    finishAffinity(); // finish all activities
                     Intent intent = new Intent(getApplicationContext(), UserLoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // clean up all activities
 

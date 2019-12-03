@@ -157,8 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/user_profile_address_lbl"
-                android:inputType="textEmailAddress" />
+                android:layout_toRightOf="@+id/user_profile_address_lbl" />
 
         </RelativeLayout>
 
