@@ -11,9 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -21,6 +28,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class ItemListFragment extends Fragment {
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
+    private List<Item> mItems;
+    DatabaseReference reff;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,15 +43,48 @@ public class ItemListFragment extends Fragment {
         return view;
     }
 
-    private void updateUI(){
+    private void updateUI() {
+
         ItemLab itemLab = ItemLab.get(getActivity());
         List<Item> items = itemLab.getItems();
 
         mAdapter = new ItemAdapter(items);
+        mAdapter.notifyDataSetChanged();
         mItemRecyclerView.setAdapter(mAdapter);
+
+        reff = FirebaseDatabase.getInstance().getReference().child("item");
+        mItems = new ArrayList<>();
+        reff.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        String id = childSnapshot.child("id").getValue().toString();
+                        String name = childSnapshot.child("name").getValue().toString();
+                        String category = childSnapshot.child("category").getValue().toString();
+                        int price = Integer.parseInt(childSnapshot.child("price").getValue().toString());
+                        String description = childSnapshot.child("description").getValue().toString();
+                        String imageName = childSnapshot.child("imageName").getValue().toString();
+                        mItems.add(new Item(id, name, category, price, description, imageName));
+                        mAdapter.notifyDataSetChanged();
+                        mItemRecyclerView.setAdapter(mAdapter);
+                    }
+                } else{
+                    Toast.makeText(getContext(),"No item found",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
-    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mNameTextView;
         private TextView mCatTextView;
         private TextView mPriceTextView;
@@ -69,13 +111,13 @@ public class ItemListFragment extends Fragment {
             mPriceTextView.setText("RM" + String.valueOf(mItem.getPrice()));
 
             mImageName = mItem.getImageName();
-            mImageID = getResources().getIdentifier(mImageName,"drawable", "com.inti.student.criminalintent");
+            mImageID = getResources().getIdentifier(mImageName, "drawable", "com.inti.student.criminalintent");
             mItemImageView.setImageResource(mImageID);
         }
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(),ItemDetailsActivity.class);
+            Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
             intent.putExtra("itemId", mItemId);
             startActivity(intent);
         }
@@ -83,6 +125,7 @@ public class ItemListFragment extends Fragment {
 
     private class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
         private List<Item> mItems;
+
         public ItemAdapter(List<Item> items) {
             mItems = items;
         }

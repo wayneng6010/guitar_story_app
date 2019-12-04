@@ -78,6 +78,16 @@
         android:layout_height="50dp">
 
         <TextView
+            android:id="@+id/purchased_item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="11/11/19 12:01AM"/>
+
+        <TextView
             android:id="@+id/purchased_item_quantity_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -46,6 +46,8 @@ public abstract class ItemListSingleFragmentActivity extends FragmentActivity {
                     .commit();
         }
 
+
+
     }
 
     public void goToCart(android.view.View v) {
