@@ -81,6 +81,7 @@ public class PurchasedItemActivity extends AppCompatActivity {
         private TextView mPriceTextView;
         private ImageView mItemImageView;
         private TextView mQuantityTextView;
+        private TextView mPurchaseDate;
         private TextView mQuantityTotalTextView;
         private ItemPurchase mItem;
         private String itemId;
@@ -94,6 +95,7 @@ public class PurchasedItemActivity extends AppCompatActivity {
             mPriceTextView = (TextView) itemView.findViewById(R.id.purchased_item_price);
             mItemImageView = (ImageView) itemView.findViewById(R.id.purchased_item_image);
             mQuantityTextView = (TextView) itemView.findViewById(R.id.purchased_item_quantity);
+            mPurchaseDate = (TextView) itemView.findViewById(R.id.purchased_item_date);
             mQuantityTotalTextView = (TextView) itemView.findViewById(R.id.purchased_item_quantity_total);
             itemView.setOnClickListener(this);
         }
@@ -113,6 +115,7 @@ public class PurchasedItemActivity extends AppCompatActivity {
             mItemImageView.setImageResource(mImageID);
 
             mQuantityTextView.setText("x" + String.valueOf(mItem.getQty()));
+            mPurchaseDate.setText("Purchased on " + mItem.getPurchaseDate());
             mQuantityTotalTextView.setText(String.valueOf(mItem.getQty()) + " Items, Total: RM" + String.valueOf(mItem.getQty() * item_info.getPrice()));
         }
 
@@ -122,7 +125,6 @@ public class PurchasedItemActivity extends AppCompatActivity {
             intent.putExtra("itemId", itemId);
             startActivity(intent);
         }
-
 
     }
 

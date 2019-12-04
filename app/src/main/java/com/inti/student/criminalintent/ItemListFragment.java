@@ -28,7 +28,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class ItemListFragment extends Fragment {
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
-    private List<Item> mItems;
     DatabaseReference reff;
 
     @Override
@@ -53,20 +52,12 @@ public class ItemListFragment extends Fragment {
         mItemRecyclerView.setAdapter(mAdapter);
 
         reff = FirebaseDatabase.getInstance().getReference().child("item");
-        mItems = new ArrayList<>();
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                        String id = childSnapshot.child("id").getValue().toString();
-                        String name = childSnapshot.child("name").getValue().toString();
-                        String category = childSnapshot.child("category").getValue().toString();
-                        int price = Integer.parseInt(childSnapshot.child("price").getValue().toString());
-                        String description = childSnapshot.child("description").getValue().toString();
-                        String imageName = childSnapshot.child("imageName").getValue().toString();
-                        mItems.add(new Item(id, name, category, price, description, imageName));
                         mAdapter.notifyDataSetChanged();
                         mItemRecyclerView.setAdapter(mAdapter);
                     }
@@ -80,7 +71,6 @@ public class ItemListFragment extends Fragment {
 
             }
         });
-
 
     }
 

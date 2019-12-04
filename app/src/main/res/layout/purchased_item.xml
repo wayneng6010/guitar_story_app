@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorBackgroundFloating"
+    android:background="@color/white"
     android:layout_marginVertical="5dp"
     tools:context=".PurchasedItemActivity">
 
@@ -45,7 +45,7 @@
                 android:paddingVertical="5dp"
                 android:layout_below="@+id/purchased_item_name"
                 android:text="Category | Acoustic Guitar"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/purchased_item_price"
@@ -75,23 +75,12 @@
         android:layout_below="@+id/purchased_item_info_layout"
         android:layout_marginTop="-10dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-
-        <TextView
-            android:id="@+id/purchased_item_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginHorizontal="10dp"
-            android:paddingVertical="5dp"
-            android:text="11/11/19 12:01AM"/>
+        android:layout_height="70dp">
 
         <TextView
             android:id="@+id/purchased_item_quantity_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginHorizontal="20dp"
             android:paddingVertical="5dp"
@@ -99,6 +88,17 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:text="1 Item, Total: RM999"/>
+
+        <TextView
+            android:id="@+id/purchased_item_date"
+            android:layout_below="@+id/purchased_item_quantity_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginHorizontal="20dp"
+            android:paddingVertical="5dp"
+            android:textSize="16sp"
+            android:text="Purchased on 11/11/19 12:01AM"/>
 
     </RelativeLayout>
 

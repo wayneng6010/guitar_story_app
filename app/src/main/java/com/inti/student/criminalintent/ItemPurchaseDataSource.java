@@ -9,7 +9,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import java.util.ArrayList;
+import java.util.Date;
+
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -21,6 +26,7 @@ public class ItemPurchaseDataSource {
             MySQLiteHelper.COLUMN_CART_ITEM_ID,
             MySQLiteHelper.COLUMN_CART_ITEM_QTY,
             MySQLiteHelper.COLUMN_CART_ITEM_STATUS,
+            MySQLiteHelper.COLUMN_CART_PAYMENT_DATE,
             MySQLiteHelper.COLUMN_CART_USER_ID};
     private Long mUserId;
     private Context mContext;
@@ -47,6 +53,7 @@ public class ItemPurchaseDataSource {
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_ID, itemID);
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, itemQty);
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_STATUS, "pending");
+        values.put(MySQLiteHelper.COLUMN_CART_PAYMENT_DATE, "-");
         values.put(MySQLiteHelper.COLUMN_CART_USER_ID, mUserId);
 
         Cursor cursor_item_exist = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
@@ -102,10 +109,15 @@ public class ItemPurchaseDataSource {
     }
 
     public int checkoutOneItem(String itemID, int itemQty) {
+        String pattern = "dd/MM/yy hh:mma";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date = simpleDateFormat.format(new Date());
+
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_ID, itemID);
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, itemQty);
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_STATUS, "paid");
+        values.put(MySQLiteHelper.COLUMN_CART_PAYMENT_DATE, date.toString());
         values.put(MySQLiteHelper.COLUMN_CART_USER_ID, mUserId);
 
         long rowInserted = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
@@ -132,8 +144,13 @@ public class ItemPurchaseDataSource {
     }
 
     public int checkoutItemPurchase() {
+        String pattern = "dd/MM/yy hh:mma";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date = simpleDateFormat.format(new Date());
+
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_STATUS, "paid");
+        values.put(MySQLiteHelper.COLUMN_CART_PAYMENT_DATE, date.toString());
 
         long rowUpdated = database.update(MySQLiteHelper.TABLE_ITEM_PURCHASE, values, MySQLiteHelper.COLUMN_CART_USER_ID + "='" + mUserId + "' AND " + MySQLiteHelper.COLUMN_CART_ITEM_STATUS + "='pending'", null);
 
@@ -198,6 +215,7 @@ public class ItemPurchaseDataSource {
         itemPurchase.setItemId(cursor.getString(1));
         itemPurchase.setQty(cursor.getInt(2));
         itemPurchase.setStatus(cursor.getString(3));
+        itemPurchase.setPurchaseDate(cursor.getString(4));
         return itemPurchase;
     }
 }

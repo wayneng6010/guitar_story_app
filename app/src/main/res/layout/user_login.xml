@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@drawable/bg">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,7 +22,6 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:paddingVertical="10dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="70dp">
@@ -74,64 +73,65 @@
         android:layout_centerVertical="true"
         android:layout_marginHorizontal="10dp"
         android:padding="10dp"
-        android:background="?attr/colorBackgroundFloating"
         android:gravity="bottom">
 
         <RelativeLayout
             android:id="@+id/user_login_email_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp">
+            android:layout_height="wrap_content">
 
-            <TextView
+            <ImageView
                 android:id="@+id/user_login_email_lbl"
-                android:layout_width="100dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:textAlignment="center"
-                android:layout_marginRight="10dp"
                 android:text="Email"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="40dp"
+                android:src="@drawable/email_icon" />
 
             <EditText
                 android:id="@+id/user_login_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/user_login_email_lbl"/>
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="15dp"
+                android:background="@drawable/edittextbg"
+                android:hint="Email"
+                android:layout_toRightOf="@+id/user_login_email_lbl"
+                android:inputType="textEmailAddress" />
 
         </RelativeLayout>
 
 
         <RelativeLayout
             android:id="@+id/user_login_password_layout"
-            android:layout_below="@+id/user_login_email_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp">
+            android:layout_below="@+id/user_login_email_layout"
+            android:layout_marginBottom="10dp">
 
-            <TextView
+            <ImageView
                 android:id="@+id/user_login_password_lbl"
-                android:layout_width="100dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:textAlignment="center"
-                android:layout_marginRight="10dp"
-                android:text="Password"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="40dp"
+                android:src="@drawable/psw_icon"/>
 
             <EditText
                 android:id="@+id/user_login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/user_login_password_lbl"
+                android:background="@drawable/edittextbg"
+                android:hint="Password"
                 android:inputType="textPassword"
-                android:layout_toRightOf="@+id/user_login_password_lbl"/>
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="15dp" />
 
         </RelativeLayout>
 
@@ -139,12 +139,13 @@
             android:id="@+id/user_login_btn"
             android:clickable="true"
             android:onClick="login"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
+            android:layout_width="250dp"
+            android:layout_height="55dp"
             android:layout_below="@+id/user_login_password_layout"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
             android:backgroundTint="@color/colorPrimaryDark"
+            android:background="@drawable/buttonbg"
             android:text="Login"
             android:textColor="@color/white"
             android:textSize="18sp"/>
@@ -168,33 +169,32 @@
         android:layout_centerVertical="true"
         android:layout_marginHorizontal="10dp"
         android:padding="10dp"
-        android:background="?attr/colorBackgroundFloating"
         android:gravity="bottom">
 
         <RelativeLayout
             android:id="@+id/user_register_name_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10sp">
+            android:layout_height="wrap_content">
 
-            <TextView
+            <ImageView
                 android:id="@+id/user_register_name_lbl"
-                android:layout_width="100dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:textAlignment="center"
-                android:layout_marginRight="10dp"
-                android:text="Name"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="40dp"
+                android:src="@drawable/name_icon" />
 
             <EditText
                 android:id="@+id/user_register_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/user_register_name_lbl"/>
+                android:layout_toRightOf="@+id/user_register_name_lbl"
+                android:background="@drawable/edittextbg"
+                android:hint="Name"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="15dp"/>
 
         </RelativeLayout>
 
@@ -202,20 +202,16 @@
             android:id="@+id/user_register_email_layout"
             android:layout_below="@+id/user_register_name_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10sp">
+            android:layout_height="wrap_content">
 
-            <TextView
+            <ImageView
                 android:id="@+id/user_register_email_lbl"
-                android:layout_width="100dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:textAlignment="center"
-                android:layout_marginRight="10dp"
-                android:text="Email"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="40dp"
+                android:src="@drawable/email_icon"  />
 
             <EditText
                 android:id="@+id/user_register_email"
@@ -223,7 +219,11 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/user_register_email_lbl"/>
+                android:layout_toRightOf="@+id/user_register_email_lbl"
+                android:background="@drawable/edittextbg"
+                android:hint="Email"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="15dp"/>
 
         </RelativeLayout>
 
@@ -231,20 +231,16 @@
             android:id="@+id/user_register_address_layout"
             android:layout_below="@+id/user_register_email_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10sp">
+            android:layout_height="wrap_content">
 
-            <TextView
+            <ImageView
                 android:id="@+id/user_register_address_lbl"
-                android:layout_width="100dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:textAlignment="center"
-                android:layout_marginRight="10dp"
-                android:text="Address"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="40dp"
+                android:src="@drawable/address_icon" />
 
             <EditText
                 android:id="@+id/user_register_address"
@@ -252,7 +248,11 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/user_register_address_lbl"/>
+                android:layout_toRightOf="@+id/user_register_address_lbl"
+                android:background="@drawable/edittextbg"
+                android:hint="Address"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="15dp"/>
 
         </RelativeLayout>
 
@@ -260,20 +260,16 @@
             android:id="@+id/user_register_password_layout"
             android:layout_below="@+id/user_register_address_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10sp">
+            android:layout_height="wrap_content">
 
-            <TextView
+            <ImageView
                 android:id="@+id/user_register_password_lbl"
-                android:layout_width="100dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:textAlignment="center"
-                android:layout_marginRight="10dp"
-                android:text="Password"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="40dp"
+                android:src="@drawable/psw_icon" />
 
             <EditText
                 android:id="@+id/user_register_password"
@@ -281,7 +277,11 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/user_register_password_lbl"/>
+                android:layout_toRightOf="@+id/user_register_password_lbl"
+                android:background="@drawable/edittextbg"
+                android:hint="Password"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="15dp"/>
 
         </RelativeLayout>
 
@@ -289,20 +289,16 @@
             android:id="@+id/user_register_cpassword_layout"
             android:layout_below="@+id/user_register_password_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10sp">
+            android:layout_height="wrap_content">
 
-            <TextView
+            <ImageView
                 android:id="@+id/user_register_cpassword_lbl"
-                android:layout_width="100dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:textAlignment="center"
-                android:layout_marginRight="10dp"
-                android:text="Confirm Password"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="40dp"
+                android:src="@drawable/psw_icon" />
 
             <EditText
                 android:id="@+id/user_register_cpassword"
@@ -310,7 +306,11 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/user_register_cpassword_lbl"/>
+                android:layout_toRightOf="@+id/user_register_cpassword_lbl"
+                android:background="@drawable/edittextbg"
+                android:hint="Confirm Password"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="15dp"/>
 
         </RelativeLayout>
 
@@ -318,12 +318,13 @@
             android:id="@+id/user_register_btn"
             android:clickable="true"
             android:onClick="register"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
+            android:layout_width="250dp"
+            android:layout_height="55dp"
             android:layout_below="@+id/user_register_cpassword_layout"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
             android:backgroundTint="@color/colorPrimaryDark"
+            android:background="@drawable/buttonbg"
             android:text="Register"
             android:textColor="@color/white"
             android:textSize="18sp"/>

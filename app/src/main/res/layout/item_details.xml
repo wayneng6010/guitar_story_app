@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,17 +31,22 @@
 
     </RelativeLayout>
 
+
     <ImageView
         android:id="@+id/details_item_image"
         android:layout_width="400dp"
         android:layout_height="400dp"
+        android:layout_marginBottom="-3dp"
+        android:layout_marginTop="52dp"
         android:src="@drawable/ic_launcher_background" />
 
     <RelativeLayout
+        android:id="@+id/details_item_price_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/details_item_image"
         android:layout_marginBottom="10dp"
-        android:background="?attr/colorBackgroundFloating"
+        android:background="@color/white"
         android:padding="10dp">
 
         <TextView
@@ -66,10 +71,12 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/details_item_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/details_item_price_name"
         android:layout_marginBottom="10dp"
-        android:background="?attr/colorBackgroundFloating"
+        android:background="@color/white"
         android:padding="10dp">
 
         <TextView
@@ -92,10 +99,13 @@
 
     </RelativeLayout>
 
+
     <RelativeLayout
+        android:id="@+id/details_item_description_outer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorBackgroundFloating"
+        android:layout_below="@+id/details_item_category"
+        android:background="@color/white"
         android:padding="10dp">
 
         <TextView
@@ -126,7 +136,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_weight="1"
         android:background="#f7f7f7"
         android:gravity="bottom">
 
@@ -152,4 +161,4 @@
 
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
