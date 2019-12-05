@@ -3,6 +3,7 @@ package com.inti.student.criminalintent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.inti.student.criminalintent.Config.Config;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +41,18 @@ public class CartActivity extends AppCompatActivity {
     private RelativeLayout mEmptyCartLayout;
     private ImageView mDeleteImageView;
 
+    // for PayPal payment
+    private static final int PAYPAL_REQUEST_CODE = 7171;
+    private static PayPalConfiguration config = new PayPalConfiguration()
+            .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+            .clientId(Config.PAYPAL_CLIENT_ID);
+
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(this, PayPalService.class));
+        super.onDestroy();
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -42,6 +63,11 @@ public class CartActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.recyclerview_item_cart);
+
+        // start PayPal service
+        Intent intent = new Intent(this, PayPalService.class);
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        startService(intent);
 
         datasource = new ItemPurchaseDataSource(this);
         datasource.open();
@@ -119,26 +145,16 @@ public class CartActivity extends AppCompatActivity {
                 if (values.size() == 0){ // if the cart is empty
                     Toast.makeText(getApplicationContext(),"Please add something to the cart",Toast.LENGTH_LONG).show();
                 } else {
+                    final int final_price = total_price;
                     new AlertDialog.Builder(CartActivity.this)
                             .setTitle("Checkout Confirmation")
-                            .setMessage("Total payment amount: RM" + Integer.toString(total_price))
+                            .setMessage("Total payment amount: RM" + Integer.toString(final_price))
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .setPositiveButton("Confirm Payment", new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    int result = datasource.checkoutItemPurchase();
-                                    switch (result) {
-                                        case 1:
-                                            Toast.makeText(getApplicationContext(), "Checkout successful", Toast.LENGTH_LONG).show();
-                                            break;
-                                        case 0:
-                                            Toast.makeText(getApplicationContext(), "Failed to checkout", Toast.LENGTH_LONG).show();
-                                            break;
-                                    }
-                                    // clear activity
-                                    finish();
-                                    Intent intent = new Intent(getBaseContext(), PurchasedItemActivity.class);
-                                    startActivity(intent);
+                                    processPayment(final_price);
+
                                 }
                             })
                             .setNegativeButton("Cancel", null).show();
@@ -147,6 +163,45 @@ public class CartActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void processPayment(int final_price){
+        PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(String.valueOf(final_price)), "MYR",
+                "Payment for Guitar Story", PayPalPayment.PAYMENT_INTENT_SALE);
+        Intent intent = new Intent(this, PaymentActivity.class);
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
+        startActivityForResult(intent, PAYPAL_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == PAYPAL_REQUEST_CODE){
+            if (resultCode == RESULT_OK){
+                PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                if (confirmation != null){
+                    datasource.open();
+                    int result = datasource.checkoutItemPurchase();
+                    switch (result) {
+                        case 1:
+                            new AlertDialog.Builder(CartActivity.this)
+                                    .setTitle("Message")
+                                    .setMessage("Checkout successful")
+                                    .setIcon(android.R.drawable.ic_dialog_info)
+                                    .setPositiveButton("OK", null).show();
+                            //Toast.makeText(getApplicationContext(), "Checkout successful", Toast.LENGTH_LONG).show();
+                            break;
+                        case 0:
+                            Toast.makeText(getApplicationContext(), "Failed to checkout", Toast.LENGTH_LONG).show();
+                            break;
+                    }
+                    // clear activity
+                    finish();
+                    Intent intent = new Intent(getBaseContext(), PurchasedItemActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }
     }
 
     @Override
