@@ -99,6 +99,7 @@
                 android:layout_centerVertical="true"
                 android:paddingVertical="10dp"
                 android:paddingHorizontal="15dp"
+                android:inputType="textCapWords"
                 android:background="@drawable/edittextbg"
                 android:hint="Name"
                 android:layout_toRightOf="@+id/user_profile_name_lbl" />
@@ -159,6 +160,7 @@
                 android:paddingVertical="10dp"
                 android:paddingHorizontal="15dp"
                 android:background="@drawable/edittextbg"
+                android:inputType="textCapWords"
                 android:hint="Address"
                 android:layout_toRightOf="@+id/user_profile_address_lbl" />
 

@@ -160,7 +160,9 @@ public class UserLoginActivity extends AppCompatActivity {
             int result = datasource.createUser(mRegName, mRegEmail, mRegPassword, mRegAddress);
             switch (result) {
                 case 1:
-                    Toast.makeText(getApplicationContext(), "Register successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Register successful",
+                            Toast.LENGTH_SHORT).show();
+                    // reset form
                     mRegNameEditText.setText("");
                     mRegEmailEditText.setText("");
                     mRegAddressEditText.setText("");
@@ -170,10 +172,12 @@ public class UserLoginActivity extends AppCompatActivity {
 
                     break;
                 case 0:
-                    Toast.makeText(getApplicationContext(), "Register failed, please try again", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Register failed, please try again",
+                            Toast.LENGTH_LONG).show();
                     break;
                 case 2:
-                    Toast.makeText(getApplicationContext(), "Email already exist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Email already exist",
+                            Toast.LENGTH_SHORT).show();
                     break;
             }
         } else {
@@ -230,9 +234,6 @@ public class UserLoginActivity extends AppCompatActivity {
                     break;
                 case 0:
                     Toast.makeText(getApplicationContext(), "Email or password is incorrect", Toast.LENGTH_LONG).show();
-                    break;
-                case 2:
-                    Toast.makeText(getApplicationContext(), "Email not found", Toast.LENGTH_LONG).show();
                     break;
             }
         } else {

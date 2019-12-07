@@ -192,6 +192,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/user_register_name_lbl"
                 android:background="@drawable/edittextbg"
+                android:inputType="textCapWords"
                 android:hint="Name"
                 android:paddingVertical="10dp"
                 android:paddingHorizontal="15dp"/>
@@ -246,10 +247,10 @@
                 android:id="@+id/user_register_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/user_register_address_lbl"
                 android:background="@drawable/edittextbg"
+                android:inputType="textCapWords"
                 android:hint="Address"
                 android:paddingVertical="10dp"
                 android:paddingHorizontal="15dp"/>

@@ -57,12 +57,16 @@ public class ItemPurchaseDataSource {
         values.put(MySQLiteHelper.COLUMN_CART_USER_ID, mUserId);
 
         Cursor cursor_item_exist = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
-                MySQLiteHelper.COLUMN_CART_ITEM_ID + "='" + itemID + "' AND " + MySQLiteHelper.COLUMN_CART_USER_ID + "='" + mUserId + "' AND " + MySQLiteHelper.COLUMN_CART_ITEM_STATUS + "='pending'", null, null, null, null);
+                MySQLiteHelper.COLUMN_CART_ITEM_ID + "='" + itemID + "' AND " +
+                        MySQLiteHelper.COLUMN_CART_USER_ID + "='" + mUserId + "' AND " +
+                        MySQLiteHelper.COLUMN_CART_ITEM_STATUS + "='pending'",
+                null, null, null, null);
 
         cursor_item_exist.moveToFirst();
 
         if (cursor_item_exist.isAfterLast()) { // if the query returns 0 row
-            long rowInserted = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
+            long rowInserted = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE,
+                    null, values);
             cursor_item_exist.close();
 
             if(rowInserted != -1) { // if insert is successful
@@ -81,7 +85,8 @@ public class ItemPurchaseDataSource {
 
                 AlertDialog dialog = new AlertDialog.Builder(mContext)
                         .setTitle("Reached maximum purchase quantity")
-                        .setMessage("You have exceed maximum purchase quantity of 10. \nYour current purchase quantity has been set to 10.")
+                        .setMessage("You have exceed maximum purchase quantity of 10. \n" +
+                                "Your current purchase quantity has been set to 10.")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -97,7 +102,10 @@ public class ItemPurchaseDataSource {
             values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, update_qty);
 
             // update current record in database
-            long rowUpdated = database.update(MySQLiteHelper.TABLE_ITEM_PURCHASE, values, MySQLiteHelper.COLUMN_ID + "='" + cartItemId + "' AND " + MySQLiteHelper.COLUMN_CART_USER_ID + "='" + mUserId + "' AND " + MySQLiteHelper.COLUMN_CART_ITEM_STATUS + "='pending'", null);
+            long rowUpdated = database.update(MySQLiteHelper.TABLE_ITEM_PURCHASE, values,
+                    MySQLiteHelper.COLUMN_ID + "='" + cartItemId + "' AND " +
+                            MySQLiteHelper.COLUMN_CART_USER_ID + "='" + mUserId + "' AND " +
+                            MySQLiteHelper.COLUMN_CART_ITEM_STATUS + "='pending'", null);
             cursor_item_exist.close();
 
             if(rowUpdated != -1) { // if update is successful
@@ -120,7 +128,8 @@ public class ItemPurchaseDataSource {
         values.put(MySQLiteHelper.COLUMN_CART_PAYMENT_DATE, date.toString());
         values.put(MySQLiteHelper.COLUMN_CART_USER_ID, mUserId);
 
-        long rowInserted = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE, null, values);
+        long rowInserted = database.insert(MySQLiteHelper.TABLE_ITEM_PURCHASE,
+                null, values);
 
         if(rowInserted != -1) { // if insert is successful
             return 1;
@@ -129,7 +138,7 @@ public class ItemPurchaseDataSource {
         }
     }
 
-        public int updateItemPurchase(long cartItemId, int itemQty) {
+    public int updateItemPurchase(long cartItemId, int itemQty) {
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_ID, cartItemId);
         values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, itemQty);
@@ -177,7 +186,9 @@ public class ItemPurchaseDataSource {
         ArrayList<ItemPurchase> items = new ArrayList<ItemPurchase>();
 
         Cursor cursor = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
-                MySQLiteHelper.COLUMN_CART_USER_ID + "='" + mUserId + "' AND " + MySQLiteHelper.COLUMN_CART_ITEM_STATUS + "='pending'", null, null, null, null);
+                MySQLiteHelper.COLUMN_CART_USER_ID + "='" + mUserId + "' AND " +
+                        MySQLiteHelper.COLUMN_CART_ITEM_STATUS + "='pending'",
+                null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

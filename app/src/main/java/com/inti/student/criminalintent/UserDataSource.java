@@ -47,11 +47,13 @@ public class UserDataSource {
         values.put(MySQLiteHelper.COLUMN_USER_ADDRESS, address);
 
         Cursor cursor_item_exist = database.query(MySQLiteHelper.TABLE_USER, allColumns,
-                MySQLiteHelper.COLUMN_USER_EMAIL + "='" + email + "'", null, null, null, null);
+                MySQLiteHelper.COLUMN_USER_EMAIL + "='" + email + "'", null,
+                null, null, null);
         cursor_item_exist.moveToFirst();
 
         if (cursor_item_exist.isAfterLast()) { // if the query returns 0 row
-            long rowInserted = database.insert(MySQLiteHelper.TABLE_USER, null, values);
+            long rowInserted = database.insert(MySQLiteHelper.TABLE_USER, null,
+                    values);
             cursor_item_exist.close();
             if(rowInserted != -1) { // if insert is successful
                 return 1;
@@ -67,7 +69,8 @@ public class UserDataSource {
         //ArrayList<User> users = new ArrayList<User>();
 
         Cursor cursor = database.query(MySQLiteHelper.TABLE_USER, allColumns,
-                MySQLiteHelper.COLUMN_USER_EMAIL + "='" + email + "'", null, null, null, null);
+                MySQLiteHelper.COLUMN_USER_EMAIL + "='" + email + "'",
+                null, null, null, null);
 
         cursor.moveToFirst();
         if (!cursor.isAfterLast()){ // if result is not empty
@@ -77,7 +80,8 @@ public class UserDataSource {
             if (password.equals(user.getPassword())) {
 
                 // create session for user login
-                SharedPreferences.Editor editor = mContext.getSharedPreferences("LoginSession", MODE_PRIVATE).edit();
+                SharedPreferences.Editor editor = mContext
+                        .getSharedPreferences("LoginSession", MODE_PRIVATE).edit();
                 editor.putBoolean("login", true); // if user is login
                 editor.putLong("userId", user.getId()); // stores user id
                 editor.apply();
@@ -86,11 +90,10 @@ public class UserDataSource {
             } else {
                 return 0;
             }
-        } else {
+        } else { // record with this email is not found
             cursor.close();
-            return 2;
+            return 0;
         }
-
     }
 
     public int updatePersonalInfo(String name, String email, String address){
@@ -99,12 +102,20 @@ public class UserDataSource {
         values.put(MySQLiteHelper.COLUMN_USER_EMAIL, email);
         values.put(MySQLiteHelper.COLUMN_USER_ADDRESS, address);
 
-        long rowInserted = database.update(MySQLiteHelper.TABLE_USER, values, MySQLiteHelper.COLUMN_ID + "='" + userId + "'", null);
+        Cursor cursor_item_exist = database.query(MySQLiteHelper.TABLE_USER, allColumns,
+                MySQLiteHelper.COLUMN_USER_EMAIL + "='" + email + "' AND " + MySQLiteHelper.COLUMN_ID + "!='" + userId + "'", null, null, null, null);
+        cursor_item_exist.moveToFirst();
 
-        if(rowInserted != -1) { // if insert is successful
-            return 1;
+        if (cursor_item_exist.isAfterLast()) { // if the query returns 0 row
+            cursor_item_exist.close();
+            long rowInserted = database.update(MySQLiteHelper.TABLE_USER, values, MySQLiteHelper.COLUMN_ID + "='" + userId + "'", null);
+            if (rowInserted != -1) { // if update is successful
+                return 1;
+            } else {
+                return 0;
+            }
         } else {
-            return 0;
+            return 2;
         }
     }
 
@@ -146,39 +157,6 @@ public class UserDataSource {
         cursor.close();
 
         return userInfo;
-    }
-
-    public void updateItemPurchase(long cartItemId, int itemQty) {
-        ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_ID, cartItemId);
-        values.put(MySQLiteHelper.COLUMN_CART_ITEM_QTY, itemQty);
-        database.update(MySQLiteHelper.TABLE_ITEM_PURCHASE, values, MySQLiteHelper.COLUMN_ID + "='" + cartItemId + "'", null);
-    }
-
-    public void deleteItemPurchase(ItemPurchase itemPurchase){
-        long id = itemPurchase.getId();
-        System.out.println("Comment deleted with id: " + id);
-        database.delete(MySQLiteHelper.TABLE_ITEM_PURCHASE, MySQLiteHelper.COLUMN_ID
-                + " = " + id, null);
-    }
-
-
-    public ArrayList<User> getAllItemPurchase(){
-        ArrayList<User> users = new ArrayList<User>();
-
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_ITEM_PURCHASE, allColumns,
-                null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()){
-            User user = cursorToUser(cursor);
-            users.add(user);
-            cursor.moveToNext();
-        }
-
-        // make sure to close the cursor
-        cursor.close();
-        return users;
     }
 
     private User cursorToUser(Cursor cursor){

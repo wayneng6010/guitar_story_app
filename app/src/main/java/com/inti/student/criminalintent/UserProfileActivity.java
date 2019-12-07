@@ -146,15 +146,12 @@ public class UserProfileActivity extends AppCompatActivity {
             switch (result) {
                 case 1:
                     Toast.makeText(getApplicationContext(), "Update successful", Toast.LENGTH_SHORT).show();
-                    //mRegNameEditText.setText("");
-                    //mRegEmailEditText.setText("");
-                    //mRegAddressEditText.setText("");
-                    //mRegPasswordEditText.setText("");
-                    //mRegCPasswordEditText.setText("");
-                    //mLoginLblTextView.performClick();
                     break;
                 case 0:
                     Toast.makeText(getApplicationContext(), "Update failed, please try again", Toast.LENGTH_LONG).show();
+                    break;
+                case 2:
+                    Toast.makeText(getApplicationContext(), "Email already exist", Toast.LENGTH_LONG).show();
                     break;
             }
         } else {
@@ -262,15 +259,19 @@ public class UserProfileActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // clear session
-                        SharedPreferences.Editor editor = getSharedPreferences("LoginSession", MODE_PRIVATE).edit();
+                        SharedPreferences.Editor editor = getSharedPreferences
+                                ("LoginSession", MODE_PRIVATE).edit();
                         editor.putBoolean("login", false);
                         editor.putLong("userId", 0);
                         editor.apply();
 
-                        Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Logout successful",
+                                Toast.LENGTH_LONG).show();
 
-                        Intent intent = new Intent(getApplicationContext(), ItemListActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // clean up all activities
+                        Intent intent = new Intent(getApplicationContext(),
+                                ItemListActivity.class);
+                        // clean up all activities
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                         startActivity(intent);
                     }

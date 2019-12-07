@@ -89,8 +89,8 @@ public class CartActivity extends AppCompatActivity {
         mEmptyCartLayout = (RelativeLayout) findViewById(R.id.cart_empty_layout);
         mDeleteImageView = (ImageView) findViewById(R.id.cart_delete_image_view);
         if (values.size() == 0){ // if the cart is empty
-            mEmptyCartLayout.setVisibility(View.VISIBLE);
-            mDeleteImageView.setVisibility(View.GONE);
+            mEmptyCartLayout.setVisibility(View.VISIBLE); // empty cart text view
+            mDeleteImageView.setVisibility(View.GONE); // delete icon visible
         } else {
             mEmptyCartLayout.setVisibility(View.GONE);
             mDeleteImageView.setVisibility(View.VISIBLE);
@@ -154,7 +154,6 @@ public class CartActivity extends AppCompatActivity {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
                                     processPayment(final_price);
-
                                 }
                             })
                             .setNegativeButton("Cancel", null).show();
@@ -166,11 +165,14 @@ public class CartActivity extends AppCompatActivity {
     }
 
     public void processPayment(int final_price){
-        PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(String.valueOf(final_price)), "MYR",
+        PayPalPayment payPalPayment = new PayPalPayment(
+                new BigDecimal(String.valueOf(final_price)), "MYR",
                 "Payment for Guitar Story", PayPalPayment.PAYMENT_INTENT_SALE);
+
         Intent intent = new Intent(this, PaymentActivity.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
+
         startActivityForResult(intent, PAYPAL_REQUEST_CODE);
     }
 
@@ -178,7 +180,9 @@ public class CartActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == PAYPAL_REQUEST_CODE){
             if (resultCode == RESULT_OK){
-                PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                PaymentConfirmation confirmation = data.
+                        getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+
                 if (confirmation != null){
                     datasource.open();
                     int result = datasource.checkoutItemPurchase();
@@ -188,17 +192,21 @@ public class CartActivity extends AppCompatActivity {
                                     .setTitle("Message")
                                     .setMessage("Checkout successful")
                                     .setIcon(android.R.drawable.ic_dialog_info)
-                                    .setPositiveButton("OK", null).show();
-                            //Toast.makeText(getApplicationContext(), "Checkout successful", Toast.LENGTH_LONG).show();
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            // clear activity
+                                            finish();
+                                            Intent intent = new Intent(getBaseContext(),
+                                                    PurchasedItemActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    }).show();
                             break;
                         case 0:
-                            Toast.makeText(getApplicationContext(), "Failed to checkout", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Failed to checkout",
+                                    Toast.LENGTH_LONG).show();
                             break;
                     }
-                    // clear activity
-                    finish();
-                    Intent intent = new Intent(getBaseContext(), PurchasedItemActivity.class);
-                    startActivity(intent);
                 }
             }
         }

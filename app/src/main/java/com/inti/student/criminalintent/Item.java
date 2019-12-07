@@ -11,7 +11,8 @@ public class Item {
     private String mDescription;
     private String mImageName;
 
-    public Item(String id, String name, String category, int price, String description, String imageName) {
+    public Item(String id, String name, String category, int price, String description,
+                String imageName) {
         mId = id;
         mName = name;
         mCategory = category;

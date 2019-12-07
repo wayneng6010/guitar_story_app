@@ -101,7 +101,8 @@ public class ItemListFragment extends Fragment {
             mPriceTextView.setText("RM" + String.valueOf(mItem.getPrice()));
 
             mImageName = mItem.getImageName();
-            mImageID = getResources().getIdentifier(mImageName, "drawable", "com.inti.student.criminalintent");
+            mImageID = getResources().getIdentifier(mImageName, "drawable",
+                    "com.inti.student.criminalintent");
             mItemImageView.setImageResource(mImageID);
         }
 

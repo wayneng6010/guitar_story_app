@@ -27,8 +27,8 @@ public abstract class ItemListSingleFragmentActivity extends FragmentActivity {
         SharedPreferences prefs = this.getSharedPreferences("LoginSession", MODE_PRIVATE);
         isLogin = prefs.getBoolean("login", false); // retrieve login session saved in preference
 
-        mLoginTextView = (TextView) findViewById(R.id.home_login_text_view);
-        mProfileImageView = (ImageView) findViewById(R.id.home_profile_image_view);
+        mLoginTextView = (TextView) findViewById(R.id.home_login_text_view); // login button
+        mProfileImageView = (ImageView) findViewById(R.id.home_profile_image_view); // profile button
 
         if (isLogin) {
             mLoginTextView.setVisibility(View.GONE);

@@ -73,6 +73,8 @@ public class ItemLab {
                         int price = Integer.parseInt(childSnapshot.child("price").getValue().toString());
                         String description = childSnapshot.child("description").getValue().toString();
                         String imageName = childSnapshot.child("imageName").getValue().toString();
+
+                        // add Item object with retrieved product information
                         mItems.add(new Item(id, name, category, price, description, imageName));
                     }
                 } else{
